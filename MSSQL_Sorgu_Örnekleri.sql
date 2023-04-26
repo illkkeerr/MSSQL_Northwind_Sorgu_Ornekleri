@@ -240,14 +240,36 @@ select MusteriAdi ,UrunAdi, sum(sd.Miktar) AlýnanMiktar , sum(sd.BirimFiyati*Mik
 select p.Adi PersonelAdi,p.SoyAdi PersonelSoyadi,m.MusteriAdi,m.SirketAdi,s.SatisID,sum (sd.Miktar*sd.BirimFiyati*(1-sd.Ýndirim)) [Toplam Harcama] from Personeller p,Musteriler m,[Satis Detaylari] sd,Satislar s where p.PersonelID=s.PersonelID and s.SatisID=sd.SatisID and s.MusteriID=m.MusteriID group by p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,s.SatisID order by p.Adi,m.MusteriAdi
 /*Hangi personel hangi þirkete hangi ürünü kaçtane satmýþtýr.
 */
+select p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,u.UrunAdi,sum(sd.Miktar) SatilanUrunAdedi,count(sd.Miktar)YapilanSatisAdedi from Personeller p,Satislar s,Musteriler m,[Satis Detaylari] sd, Urunler u where p.PersonelID=s.PersonelID and s.MusteriID=m.MusteriID and s.SatisID=sd.SatisID and sd.UrunID=u.UrunID group by p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,u.UrunAdi order by p.Adi
 
+--secili personelin secili müþteriye yaptýðý satýþlar
+select *from Satislar s where  s.MusteriID 
+in (select m.MusteriID from Musteriler m where m.MusteriAdi='Alejandra Camino')
+and s.PersonelID in (select p.PersonelID from Personeller p where p.Adi='Andrew')
 
+ select count(*)from [Satis Detaylari]
 
+ --join yapýsý
+/*join:aralarýnda iliþki bulunan tablolarýn birbirleri ile baðlantýsýný kurarak
+tek sorguda tek tablo çýktýsý vermeyi saðlayan yapýdýr.
+3 e ayrýlýr
+inner join,outer join,cross join*/
+--inner join iliþkili tablolarda null olmayan kayýtlarý listeler
+select *from Urunler u inner join Kategoriler k on u.KategoriID=k.KategoriID
+select *from Urunler
 
+select *from Urunler u inner join Tedarikciler t
+on u.TedarikciID=t.TedarikciID
+--join ve inner join aynýdýr
+--Urunler kategoriler ve tedarikçileri birleþtirin
+select *from Urunler u inner join Kategoriler k on u.KategoriID=k.KategoriID inner join Tedarikciler t on u.TedarikciID=t.TedarikciID
 
-
-
-
+--personel satýþ ve müþterileri baðlama
+select *from Personeller p inner join Satislar s on p.PersonelID=s.PersonelID inner join Musteriler m on s.MusteriID=m.MusteriID where p.Adi like 'robert'
+--hangi personel hangi üründen toplam kaç dolarlýk satýþ yaptýðýný ekrana
+--yaz (personel urunler satis detaylarý)
+select p.Adi,u.UrunAdi,avg(sd.BirimFiyati) UrununBirimFiyati ,sum(sd.Miktar) UrunSatisAdedi,sum(sd.BirimFiyati*sd.Miktar*(1-sd.Ýndirim)) ToplamYapilanSatis from Personeller p inner join Satislar s on p.PersonelID=s.PersonelID inner join [Satis Detaylari] sd on s.SatisID=sd.SatisID inner join Urunler u on sd.UrunID=u.UrunID group by p.Adi,u.UrunAdi order by p.Adi --order by 1
+--avg yerine birim fiyatý group by kýsmýna yazýlabilir
 
 
 
