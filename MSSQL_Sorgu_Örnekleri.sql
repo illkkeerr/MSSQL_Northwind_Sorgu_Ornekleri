@@ -1,24 +1,24 @@
 --DDL(Data Definition Language)
---Create veritabanında nesneler oluşturmak için kullanılır
---Alter veritabanındaki nesnelerin yapısını değiştirmek için kullanılır
---Drop veri tabanındaki nesneleri silmek için kullanılır
---Truncate kayıtlar için ayrılan tüm boşluklar dahil her şeyi kaldırır
---Rename bir nesneyi yeniden adlandırmak için kullanılır
+--Create veritabanÄ±nda nesneler oluÅŸturmak iÃ§in kullanÄ±lÄ±r
+--Alter veritabanÄ±ndaki nesnelerin yapÄ±sÄ±nÄ± deÄŸiÅŸtirmek iÃ§in kullanÄ±lÄ±r
+--Drop veri tabanÄ±ndaki nesneleri silmek iÃ§in kullanÄ±lÄ±r
+--Truncate kayÄ±tlar iÃ§in ayrÄ±lan tÃ¼m boÅŸluklar dahil her ÅŸeyi kaldÄ±rÄ±r
+--Rename bir nesneyi yeniden adlandÄ±rmak iÃ§in kullanÄ±lÄ±r
 
 --DML(Data manipulation language)
---Select listeleme komutu veritabanından kayıt çekmek için kullanılır
---Insert tabloya veri yada veriler eklemek için kullanılır
---update tablodan kayıt yada kayıtların güncellenmesi için kullanılır
---delete tablodan kayıt veya kayıtları silmek için kullanılır
---diğer komutlar
---MERGE – UPSERT işlemi (ekleme veya güncelleme), başka bir ifadeyle birleştirme yapar.
---CALL – PL/SQL veya Java alt programını çalıştırır.
---EXPLAIN PLAN – Verilere erişim yolunun detaylarını açıklamak için kullanılır.
---LOCK TABLE – Kontrolü eş zamanlılığı sağlamak için kullanılır.
---diğer komutlar
+--Select listeleme komutu veritabanÄ±ndan kayÄ±t Ã§ekmek iÃ§in kullanÄ±lÄ±r
+--Insert tabloya veri yada veriler eklemek iÃ§in kullanÄ±lÄ±r
+--update tablodan kayÄ±t yada kayÄ±tlarÄ±n gÃ¼ncellenmesi iÃ§in kullanÄ±lÄ±r
+--delete tablodan kayÄ±t veya kayÄ±tlarÄ± silmek iÃ§in kullanÄ±lÄ±r
+--diÄŸer komutlar
+--MERGE â€“ UPSERT iÅŸlemi (ekleme veya gÃ¼ncelleme), baÅŸka bir ifadeyle birleÅŸtirme yapar.
+--CALL â€“ PL/SQL veya Java alt programÄ±nÄ± Ã§alÄ±ÅŸtÄ±rÄ±r.
+--EXPLAIN PLAN â€“ Verilere eriÅŸim yolunun detaylarÄ±nÄ± aÃ§Ä±klamak iÃ§in kullanÄ±lÄ±r.
+--LOCK TABLE â€“ KontrolÃ¼ eÅŸ zamanlÄ±lÄ±ÄŸÄ± saÄŸlamak iÃ§in kullanÄ±lÄ±r.
+--diÄŸer komutlar
 --https://www.gencayyildiz.com/blog/northwind-turkce-versiyonu/
 
---select kolonadı from urunler
+--select kolonadÄ± from urunler
 select *from Urunler
 select Adi,soyadi from Personeller
 select MusteriAdi from Musteriler
@@ -26,250 +26,297 @@ select *from Tedarikciler
 select *from [Satis Detaylari]
 select *from Nakliyeciler
 
---ürün id sinin 4 olduğu verileri getirme
+--Ã¼rÃ¼n id sinin 4 olduÄŸu verileri getirme
 select *from Urunler where UrunID=4
---tedarikçi id sinin 7'ye eşit olup kategori idsinin 3ten küçük eşit olduğu ürünleri listele
+--tedarikÃ§i id sinin 7'ye eÅŸit olup kategori idsinin 3ten kÃ¼Ã§Ã¼k eÅŸit olduÄŸu Ã¼rÃ¼nleri listele
 select UrunID,UrunAdi,TedarikciID,KategoriID from Urunler where TedarikciID=7 and KategoriID<=3
---Personellerden london da yaşayanalrı listele
+--Personellerden london da yaÅŸayanalrÄ± listele
 select PersonelID,Adi,SoyAdi,Sehir from Personeller where Sehir='London'
---Müşterilerden ülkesi fransa olanları listeleme
+--MÃ¼ÅŸterilerden Ã¼lkesi fransa olanlarÄ± listeleme
 select SirketAdi,MusteriAdi,Ulke from Musteriler where ulke='France'
---tedarikçiid 1 kategori id si 1 hedef stok düzeyi 10 dan büyük ürünler tablosu
+--tedarikÃ§iid 1 kategori id si 1 hedef stok dÃ¼zeyi 10 dan bÃ¼yÃ¼k Ã¼rÃ¼nler tablosu
 select *from urunler where TedarikciID=1 and KategoriID=1 and  HedefStokDuzeyi>=10
---musteri id'si chops olanları bulma 
+--musteri id'si chops olanlarÄ± bulma 
 select *from Musteriler m where m.MusteriID  in('chops')
---ilk harfi c son harfi e olan ürünleri listele
+--ilk harfi c son harfi e olan Ã¼rÃ¼nleri listele
 select *from Urunler U where u.UrunAdi like 'c%' and u.UrunAdi like '%e'
 select *from Urunler U where u.UrunAdi like 'c%e' 
---ilk harfi c veya a olan ürünleri listele
+--ilk harfi c veya a olan Ã¼rÃ¼nleri listele
 select *from Urunler u where u.UrunAdi like 'a%' or u.UrunAdi like 'c%'
 select *from urunler u where u.UrunAdi like '[c,a]%'
---ikinci harfi a olan ürünleri listele
+--ikinci harfi a olan Ã¼rÃ¼nleri listele
 select *from Urunler u where u.UrunAdi like '_a%'
---ürün idsi 5,7,8,11 olanları listele
+--Ã¼rÃ¼n idsi 5,7,8,11 olanlarÄ± listele
 select *from Urunler where UrunID=5 or UrunID=7 or UrunID=8 or UrunID=11
 select *from urunler where UrunID in(5,7,8,11)
---ürünadi chai ve chang olanları listele
+--Ã¼rÃ¼nadi chai ve chang olanlarÄ± listele
 select *from Urunler u where u.UrunAdi in('chai','chang')
---ürün id si 5 ile 10 arasında olan ürünleri listele
+--Ã¼rÃ¼n id si 5 ile 10 arasÄ±nda olan Ã¼rÃ¼nleri listele
 select *from Urunler u where u.UrunID between 5 and 10
---birim fiyati 15 ile 25 arasında olan ürünleri listele
+--birim fiyati 15 ile 25 arasÄ±nda olan Ã¼rÃ¼nleri listele
 select *from Urunler u where u.BirimFiyati between 15 and 25
---ürünlerin ilk 15 ürününü seç
+--Ã¼rÃ¼nlerin ilk 15 Ã¼rÃ¼nÃ¼nÃ¼ seÃ§
 select top 15 *from Urunler
---adının ilk harfi c olan sondan ikinci harfi n veya a olan  ve birim fiyati 18 ile 75 arsında olan 2 ürünü listele
+--adÄ±nÄ±n ilk harfi c olan sondan ikinci harfi n veya a olan  ve birim fiyati 18 ile 75 arsÄ±nda olan 2 Ã¼rÃ¼nÃ¼ listele
 select top 3 *from Urunler u where u.UrunAdi like 'c%[n,a]_' and u.BirimFiyati between 18 and 75
---ürünleri birim fiyatına göre sırala artan/azalan
+--Ã¼rÃ¼nleri birim fiyatÄ±na gÃ¶re sÄ±rala artan/azalan
 select *from Urunler u order by u.BirimFiyati--artan
 select *from urunler u order by u.BirimFiyati desc--azalan
---kategori id'si 5 olmayan ve ürün adı ikinci harfi i olan ürünler listesi birim fiyatı azalarak sıralansın
+--kategori id'si 5 olmayan ve Ã¼rÃ¼n adÄ± ikinci harfi i olan Ã¼rÃ¼nler listesi birim fiyatÄ± azalarak sÄ±ralansÄ±n
 select *from Urunler u where u.KategoriID<>5 and u.UrunAdi like '_i%' order by u.BirimFiyati desc
 select *from Urunler u where u.KategoriID!=5 and u.UrunAdi like '_i%' order by u.BirimFiyati desc
---ürünid si 5,14,17,25,34 olmayan ürünleri ekrana yazma
+--Ã¼rÃ¼nid si 5,14,17,25,34 olmayan Ã¼rÃ¼nleri ekrana yazma
 select *from Urunler u where u.UrunID not in(5,14,17,25,34)
---ürünid si 2,3,4 olanları ekrana yazma
+--Ã¼rÃ¼nid si 2,3,4 olanlarÄ± ekrana yazma
 select *from Urunler u where u.UrunID in(2,3,4)
---içinde c harfi ve a harfi geçmeyen ürün adlarını ekrana yazdırma
+--iÃ§inde c harfi ve a harfi geÃ§meyen Ã¼rÃ¼n adlarÄ±nÄ± ekrana yazdÄ±rma
 select *from Urunler u where u.UrunAdi not like '%c%' and u.UrunAdi not like '%a%'
 select *from Urunler u where u.UrunAdi not like '%[c,a]%'
---kategoriler tanim veya resim null olan değerleri getir
+--kategoriler tanim veya resim null olan deÄŸerleri getir
 select *from Kategoriler k where k.Tanimi is null or k.Resim is null
 /*
 insert into Kategoriler(KategoriAdi) values('Kiraz') 
 insert into Kategoriler(KategoriAdi) values('Armut') 
 */
---Personel id si 4 olan ve nakliyeci ücreti 15 ile 45 arasında olan sevk tarihine
---göre tersten sıralayarak son 3 kaydı getiren satışları listeleyiniz
+--Personel id si 4 olan ve nakliyeci Ã¼creti 15 ile 45 arasÄ±nda olan sevk tarihine
+--gÃ¶re tersten sÄ±ralayarak son 3 kaydÄ± getiren satÄ±ÅŸlarÄ± listeleyiniz
 select top 3 *from  Satislar s where s.PersonelID=4 and s.NakliyeUcreti between 15 and 45
 order by s.SevkTarihi desc
---Aggregate fonksiyonları
---5 tane fonkisyon türü vardır
---bu fonskiyonlar select ile from arasına yazılır
---kullanılırken yanına kolon getirilemez(şimdilik)
+--Aggregate fonksiyonlarÄ±
+--5 tane fonkisyon tÃ¼rÃ¼ vardÄ±r
+--bu fonskiyonlar select ile from arasÄ±na yazÄ±lÄ±r
+--kullanÄ±lÄ±rken yanÄ±na kolon getirilemez(ÅŸimdilik)
 
 --1 count fonksiyonu
---satır adedini verir
---kaç tane kategori id'si 4 olan ürün vardır
+--satÄ±r adedini verir
+--kaÃ§ tane kategori id'si 4 olan Ã¼rÃ¼n vardÄ±r
 select count(u.UrunAdi) from Urunler u where u.KategoriID=4
 insert into Urunler(UrunAdi) values('kivi')
 insert into urunler(UrunAdi) values('muz')
 insert into Urunler(UrunAdi) values('mango')
---kategori id'si null olan ürünleri listeleyiniz 
+--kategori id'si null olan Ã¼rÃ¼nleri listeleyiniz 
 select *from Urunler u where u.KategoriID is null
 select *from Urunler
-select count(u.UrunID) from Urunler u where u.KategoriID is null-- '=' sembolü iş yapmıyor
---kategori id si null olmayan kaç ürün vardır
+select count(u.UrunID) from Urunler u where u.KategoriID is null-- '=' sembolÃ¼ iÅŸ yapmÄ±yor
+--kategori id si null olmayan kaÃ§ Ã¼rÃ¼n vardÄ±r
 select count(*) from Urunler u where u.KategoriID is not null
 
 --2 sum fonksiyonu
---toplama işlemi yapmayı sağlar
---tedarikçi id'si 5 olan ürünlerin toplam hedef stok düzeyini bulunuz
+--toplama iÅŸlemi yapmayÄ± saÄŸlar
+--tedarikÃ§i id'si 5 olan Ã¼rÃ¼nlerin toplam hedef stok dÃ¼zeyini bulunuz
 select sum(HedefStokDuzeyi) [Toplam Stok] from urunler u where u.TedarikciID=5
---bütün ürünlerin toplam değerini bulunuz
+--bÃ¼tÃ¼n Ã¼rÃ¼nlerin toplam deÄŸerini bulunuz
 select sum(u.HedefStokDuzeyi*u.BirimFiyati)from Urunler u
 select *from Urunler
---ürün id si 5 olan ürününden ne kadar tl lik bir satış yapılmıştır
-select sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) [Urun Toplam Satis Ucreti] from [Satis Detaylari] sd where sd.UrunID=5
---ürün id si 5 olan üründen her satışta ortalama kaç tl lik bir satış olmuştur
-select sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim))/count(*) from [Satis Detaylari] sd where sd.UrunID=5
---sevk şehri graz olan satışların toplam nakliye ücretini bulunuz
+--Ã¼rÃ¼n id si 5 olan Ã¼rÃ¼nÃ¼nden ne kadar tl lik bir satÄ±ÅŸ yapÄ±lmÄ±ÅŸtÄ±r
+select sum(sd.BirimFiyati*sd.Miktar*(1-sd.Ä°ndirim)) [Urun Toplam Satis Ucreti] from [Satis Detaylari] sd where sd.UrunID=5
+--Ã¼rÃ¼n id si 5 olan Ã¼rÃ¼nden her satÄ±ÅŸta ortalama kaÃ§ tl lik bir satÄ±ÅŸ olmuÅŸtur
+select sum(sd.BirimFiyati*sd.Miktar*(1-sd.Ä°ndirim))/count(*) from [Satis Detaylari] sd where sd.UrunID=5
+--sevk ÅŸehri graz olan satÄ±ÅŸlarÄ±n toplam nakliye Ã¼cretini bulunuz
 select sum(s.NakliyeUcreti) from Satislar s where s.SevkSehri='graz'
---graz şehrine yapılan satış adedini buluz
+--graz ÅŸehrine yapÄ±lan satÄ±ÅŸ adedini buluz
 select count(*) from Satislar s where s.SevkSehri='graz'
---graz şehrine 1 satışta harcanan ortalama nakliye ücretini bulunuz
+--graz ÅŸehrine 1 satÄ±ÅŸta harcanan ortalama nakliye Ã¼cretini bulunuz
 select sum(s.NakliyeUcreti)/count(*) from Satislar s where s.SevkSehri='graz'
--- üstteki soru avg li çözüm
+-- Ã¼stteki soru avg li Ã§Ã¶zÃ¼m
 select avg(s.NakliyeUcreti) from Satislar s where s.SevkSehri='graz'
---ürünleri ortalama birim fiyatını bulunuz
+--Ã¼rÃ¼nleri ortalama birim fiyatÄ±nÄ± bulunuz
 select avg(u.BirimFiyati) from Urunler u
---Max kolon içerisinde en büyük değeri verir
+--Max kolon iÃ§erisinde en bÃ¼yÃ¼k deÄŸeri verir
 select max(BirimFiyati) from Urunler 
-select min(BirimFiyati) from urunler--boş geçince otomatik olarak birim fiyatına 0 veriliyor
+select min(BirimFiyati) from urunler--boÅŸ geÃ§ince otomatik olarak birim fiyatÄ±na 0 veriliyor
 select *from Urunler
---group by tablo içerisindeki verilerin gruplanmasını sağlar
---hangi kategoriden kaç adet ürün vardır
+--group by tablo iÃ§erisindeki verilerin gruplanmasÄ±nÄ± saÄŸlar
+--hangi kategoriden kaÃ§ adet Ã¼rÃ¼n vardÄ±r
 select u.KategoriID,count(*) [Bu Kategoride Bulunan Urun Sayisi] from urunler u group by KategoriID 
---null olan değerler sayılmıyor Önemli
---hangi tedarikçiden kaç adet ürün alınmış
+--null olan deÄŸerler sayÄ±lmÄ±yor Ã–nemli
+--hangi tedarikÃ§iden kaÃ§ adet Ã¼rÃ¼n alÄ±nmÄ±ÅŸ
 select u.TedarikciID,count(*) from Urunler u group by TedarikciID
---tedarikçi id si 7 olan tedarikçiden kaç adet ürün tedarik edilmiş
-select u.TedarikciID,count(*) [Tedarik Edilen Ürün Adedi] 
+--tedarikÃ§i id si 7 olan tedarikÃ§iden kaÃ§ adet Ã¼rÃ¼n tedarik edilmiÅŸ
+select u.TedarikciID,count(*) [Tedarik Edilen ÃœrÃ¼n Adedi] 
 from Urunler u where u.TedarikciID=7 group by u.TedarikciID
---ürünler tablosunda hangi kategoriden kaç adet vardır 
+--Ã¼rÃ¼nler tablosunda hangi kategoriden kaÃ§ adet vardÄ±r 
 select u.KategoriID,count(*) from urunler u group by u.KategoriID
 -----------
-select KategoriId,count(KategoriID) as KategoriSayısı,sum(HedefStokDuzeyi) as 
+select KategoriId,count(KategoriID) as KategoriSayÄ±sÄ±,sum(HedefStokDuzeyi) as 
 'KategoriStokToplam',sum(HedefStokDuzeyi*BirimFiyati) as toplamsatis from Urunler group by KategoriID
 -----------
---hangi tedarikçiden kaç adet tedarik yapılmış ve tedarikçiye ödenen ücret
+--hangi tedarikÃ§iden kaÃ§ adet tedarik yapÄ±lmÄ±ÅŸ ve tedarikÃ§iye Ã¶denen Ã¼cret
 select u.TedarikciID,count(TedarikciID)[Tedarik Edilen Urun Sayisi],
-sum(u.BirimFiyati*u.HedefStokDuzeyi)[Tedarikçiye Ödenen Ücret]
-from Urunler u group by TedarikciID order by [Tedarikçiye Ödenen Ücret] desc
+sum(u.BirimFiyati*u.HedefStokDuzeyi)[TedarikÃ§iye Ã–denen Ãœcret]
+from Urunler u group by TedarikciID order by [TedarikÃ§iye Ã–denen Ãœcret] desc
 --
 select *from Urunler u where u.TedarikciID=1
 --
---ülkelere yapılan satışların toplam nakliye ücretlerini yazma
-select s.SevkUlkesi,count(s.SevkUlkesi)[Toplam Satış Sayısı],sum(s.NakliyeUcreti)[Toplam Nakliye Ucreti] 
+--Ã¼lkelere yapÄ±lan satÄ±ÅŸlarÄ±n toplam nakliye Ã¼cretlerini yazma
+select s.SevkUlkesi,count(s.SevkUlkesi)[Toplam SatÄ±ÅŸ SayÄ±sÄ±],sum(s.NakliyeUcreti)[Toplam Nakliye Ucreti] 
 from Satislar s group by s.SevkUlkesi order by [Toplam Nakliye Ucreti]
---hangi personel hangi müşteriye kaç adet satış yapmıştır
-select s.MusteriID,s.PersonelID,count(*) [Yapılan satış Adedi] from Satislar s group by s.MusteriID,s.PersonelID order by s.PersonelID
---hangi müşterinin hangi nakliyeciden kaç adet siparişte bulunduğunu bulan kod
+--hangi personel hangi mÃ¼ÅŸteriye kaÃ§ adet satÄ±ÅŸ yapmÄ±ÅŸtÄ±r
+select s.MusteriID,s.PersonelID,count(*) [YapÄ±lan satÄ±ÅŸ Adedi] from Satislar s group by s.MusteriID,s.PersonelID order by s.PersonelID
+--hangi mÃ¼ÅŸterinin hangi nakliyeciden kaÃ§ adet sipariÅŸte bulunduÄŸunu bulan kod
 select s.MusteriID,s.ShipVia,count(*) NakliyeAdet from Satislar s group by s.MusteriID,s.ShipVia order by ShipVia
---birim fiyatı 18 den büyük ürünler
+--birim fiyatÄ± 18 den bÃ¼yÃ¼k Ã¼rÃ¼nler
 select *from Urunler u where u.BirimFiyati>18
 
---urunun kategori adını kategori id kullanarak kategoriler table ından çekmek
+--urunun kategori adÄ±nÄ± kategori id kullanarak kategoriler table Ä±ndan Ã§ekmek
 select u.UrunAdi,(select k.KategoriAdi from Kategoriler k where k.KategoriID=u.KategoriID) KategoriAdi from Urunler u
---tedarikci adını getirme
+--tedarikci adÄ±nÄ± getirme
 select u.UrunAdi,(select t.SirketAdi from Tedarikciler t where t.TedarikciID=u.TedarikciID) TedarikciAdi from urunler u
---satışlar tablosunu müşteri adı ünvanı personel adı soyadı ile ekrana yazdır
---iki sutunu tek sutunda  birleştirerek gönderebilirsin
+--satÄ±ÅŸlar tablosunu mÃ¼ÅŸteri adÄ± Ã¼nvanÄ± personel adÄ± soyadÄ± ile ekrana yazdÄ±r
+--iki sutunu tek sutunda  birleÅŸtirerek gÃ¶nderebilirsin
 select (select m.MusteriAdi+' '+m.MusteriUnvani from Musteriler m where m.MusteriID=s.MusteriID) Musteri,(select p.Adi+' '+p.SoyAdi from Personeller p where p.PersonelID=s.PersonelID) Personel from Satislar s
---ürünler tablosu ile birlikte her ürünün toplam satış adedixxx
+--Ã¼rÃ¼nler tablosu ile birlikte her Ã¼rÃ¼nÃ¼n toplam satÄ±ÅŸ adedixxx
 select *,(select sum(miktar)from [Satis Detaylari] sd where sd.UrunID=u.UrunID) ToplamSatisAdetleri from urunler u
---Yapılan her satıştaki en yüksek birim fiyatı yazdır
+--YapÄ±lan her satÄ±ÅŸtaki en yÃ¼ksek birim fiyatÄ± yazdÄ±r
 select (select max(sd.BirimFiyati) from [Satis Detaylari] sd where sd.SatisID=s.SatisID), * from Satislar s
---seçilen satiş idsini getir
+--seÃ§ilen satiÅŸ idsini getir
 select distinct SatisID=10248 from [Satis Detaylari]
 select SatisID from[Satis Detaylari] order by SatisID
---Kategorisi Beverages olan olan ürünleri getir
+--Kategorisi Beverages olan olan Ã¼rÃ¼nleri getir
 select *from Urunler u where u.KategoriID=(select k.KategoriID from Kategoriler k where k.KategoriAdi='Beverages') 
---ÖNEMLİ
---en yüksek miktarlı ürünün satıldığı satışı listele
+--Ã–NEMLÄ°
+--en yÃ¼ksek miktarlÄ± Ã¼rÃ¼nÃ¼n satÄ±ldÄ±ÄŸÄ± satÄ±ÅŸÄ± listele
 select top 1 SatisID,(select max(Miktar) from [Satis Detaylari] 
 where Satislar.SatisID=[Satis Detaylari].SatisID ) adet from  Satislar order by adet desc
---satışlardaki satış id ile satış detaylarındaki en yüksek birim fiyatı bulma
+--satÄ±ÅŸlardaki satÄ±ÅŸ id ile satÄ±ÅŸ detaylarÄ±ndaki en yÃ¼ksek birim fiyatÄ± bulma
 select (select (max(sd.BirimFiyati)) from [Satis Detaylari] sd where sd.SatisID=s.SatisID) BirimFiyati,*from Satislar s 
 
 select *from Satislar
---satışlardaki satılan en yüksek  idli ürünü yazdırma
+--satÄ±ÅŸlardaki satÄ±lan en yÃ¼ksek  idli Ã¼rÃ¼nÃ¼ yazdÄ±rma
 select (select (max(sd.BirimFiyati))from [Satis Detaylari] sd where sd.SatisID=s.SatisID),*from Satislar s 
---satış detaylarında ürünleri kategori adlarını getirme
+--satÄ±ÅŸ detaylarÄ±nda Ã¼rÃ¼nleri kategori adlarÄ±nÄ± getirme
 select (select u.KategoriID from Urunler u where u.UrunID=sd.UrunID) [Kategori Id],(select k.KategoriAdi from Kategoriler k where k.KategoriID=(select u.KategoriID from Urunler u where u.UrunID=sd.UrunID)) KategoriAdi,*from [Satis Detaylari] sd
 ---------------------------------2. Tip Sorgular-----------------------------------------
---Personel adı nancy olan personelin yaptığı satışları listele
+--Personel adÄ± nancy olan personelin yaptÄ±ÄŸÄ± satÄ±ÅŸlarÄ± listele
 select 'nancy' Personel,*from Satislar s where s.PersonelID=(select p.PersonelID from Personeller p where p.Adi='nancy') 
 
 select (select p.Adi from Personeller p where p.PersonelID=s.PersonelID) PersonelAdi,* from Satislar s where PersonelID= (select PersonelID from Personeller where Adi='nancy') or PersonelID= (select PersonelID from Personeller where Adi='steven')
 
 select * from Satislar where PersonelID in
 (select PersonelID from Personeller where Adi in('nancy','steven'))
---kategori id si Beverages olan ürünleri listele
+--kategori id si Beverages olan Ã¼rÃ¼nleri listele
 select (select k.KategoriAdi from Kategoriler k where u.KategoriID=k.KategoriID) KategoriAdi,*from Urunler u where u.KategoriID=(select k.KategoriID from Kategoriler k where k.KategoriAdi='Beverages') 
---ürün adı chai olan ürün kaç defa satılmıştır
+--Ã¼rÃ¼n adÄ± chai olan Ã¼rÃ¼n kaÃ§ defa satÄ±lmÄ±ÅŸtÄ±r
 select count(*)from [Satis Detaylari] sd where sd.UrunID=(select u.UrunID from Urunler u where u.UrunAdi='chai')
---personel adı Nancy veya Janet olan, nakliyecisi speedy express olan satışları
+--personel adÄ± Nancy veya Janet olan, nakliyecisi speedy express olan satÄ±ÅŸlarÄ±
 select *from Satislar s where s.PersonelID in (select p.PersonelID from Personeller p where p.Adi in('nancy','janet')) and s.ShipVia in (select n.NakliyeciID from Nakliyeciler n where n.SirketAdi in ('speedy express'))
---1997 yılında yapılan satışlardan ne kadar ciro edildiğini ciro satiş detaylarında
+--1997 yÄ±lÄ±nda yapÄ±lan satÄ±ÅŸlardan ne kadar ciro edildiÄŸini ciro satiÅŸ detaylarÄ±nda
 select *from Satislar s where  s.SatisTarihi between '1997-01-01' and '1997-12-31'
 
-select sd.SatisID,sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) from [Satis Detaylari] sd where SatisID in(select s.SatisID from Satislar s where  s.SatisTarihi between '1997-01-01' and '1997-12-31') group by sd.SatisID
+select sd.SatisID,sum(sd.BirimFiyati*sd.Miktar*(1-sd.Ä°ndirim)) from [Satis Detaylari] sd where SatisID in(select s.SatisID from Satislar s where  s.SatisTarihi between '1997-01-01' and '1997-12-31') group by sd.SatisID
 
-select sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) from [Satis Detaylari] sd 
+select sum(sd.BirimFiyati*sd.Miktar*(1-sd.Ä°ndirim)) from [Satis Detaylari] sd 
 where sd.SatisID in
 (select s.SatisID from Satislar s where s.SatisTarihi between '1997.01.01' and '1997.12.31')
 
---Alfkı olan müşteriye  yapılan satış adedi
+--AlfkÄ± olan mÃ¼ÅŸteriye  yapÄ±lan satÄ±ÅŸ adedi
 select *from Satislar s where s.MusteriID='ALFKI'
 
 select count(SatisID) from satislar where MusteriID in ('VINET')
 select count(SatisID) from satislar where MusteriID in (select MusteriID from Musteriler where SirketAdi='Vins et alcools Chevalier')
---speedy express firması toplamda kaç adet ürünün nakliyesi yapmıştır
+--speedy express firmasÄ± toplamda kaÃ§ adet Ã¼rÃ¼nÃ¼n nakliyesi yapmÄ±ÅŸtÄ±r
 select count(sd.Miktar) from [Satis Detaylari] sd where sd.SatisID in (select s.SatisID from Satislar s where s.ShipVia in (select n.NakliyeciID from Nakliyeciler n where n.SirketAdi in ('Speedy Express'))) 
 group by sd.SatisID
---İki Tabloyu Birleştirme
---gerekli tabloları birleştirerek tek bir tablo haline getiriyoruz.
---böylece istediğimiz sutunları rahatlıkla listeleyebiliyoruz
---ürünleri kategori adları ile listele sonra içinde urun idsi 5 olanı t ek getir
+--Ä°ki Tabloyu BirleÅŸtirme
+--gerekli tablolarÄ± birleÅŸtirerek tek bir tablo haline getiriyoruz.
+--bÃ¶ylece istediÄŸimiz sutunlarÄ± rahatlÄ±kla listeleyebiliyoruz
+--Ã¼rÃ¼nleri kategori adlarÄ± ile listele sonra iÃ§inde urun idsi 5 olanÄ± t ek getir
 select u.UrunAdi,u.KategoriID,k.KategoriID,k.KategoriAdi from Urunler u,Kategoriler k where u.KategoriID=k.KategoriID
 
 select u.UrunAdi,u.KategoriID,k.KategoriID,k.KategoriAdi from Urunler u,Kategoriler k where u.KategoriID=k.KategoriID and u.UrunID=5;
---urunler tedarikçiler ve kategorileri birleştir
+--urunler tedarikÃ§iler ve kategorileri birleÅŸtir
 select u.UrunAdi,k.KategoriAdi,t.MusteriAdi,t.SirketAdi from Urunler u,Kategoriler k,Tedarikciler t where u.KategoriID=k.KategoriID and u.TedarikciID=t.TedarikciID
---hangi müşteriye hangi satış ve hangi ürün
+--hangi mÃ¼ÅŸteriye hangi satÄ±ÅŸ ve hangi Ã¼rÃ¼n
 select m.MusteriID,m.MusteriAdi,s.SatisID,s.SatisTarihi,u.UrunAdi,sd.Miktar from Musteriler m,Satislar s,Urunler u,[Satis Detaylari] sd where m.MusteriID=s.MusteriID and s.SatisID=sd.SatisID and sd.UrunID=u.UrunID order by s.SatisID
---tedarikçiler kategoriler,urunler
+--tedarikÃ§iler kategoriler,urunler
 select *from Tedarikciler t,Kategoriler k,Urunler u where u.KategoriID=k.KategoriID and u.TedarikciID=t.TedarikciID
 order by t.TedarikciID desc
 --sorgu
 select m.SirketAdi,m.Sehir,m.MusteriAdi,s.SevkTarihi,s.SevkUlkesi,sd.BirimFiyati,sd.Miktar,u.UrunAdi,k.KategoriAdi from Musteriler m, Satislar s, [Satis Detaylari] sd, Urunler u, Kategoriler k where m.MusteriID=s.MusteriID and s.SatisID=sd.SatisID and sd.UrunID=u.UrunID and u.KategoriID=k.KategoriID  order by MusteriAdi 
 --sorgu
-select MusteriAdi ,UrunAdi, sum(sd.Miktar) AlınanMiktar , sum(sd.BirimFiyati*Miktar*(1-sd.İndirim)) OdenenFiyat from Urunler u, Musteriler m, Satislar s ,[Satis Detaylari] sd where (u.UrunID=sd.UrunID) and (sd.SatisID=s.SatisID) and (s.MusteriID=m.MusteriID) group by u.UrunAdi,m.MusteriAdi
---hangi personel hangi müşteriye kaç tllik harcama yaptırmış
---önemli
-select p.Adi PersonelAdi,p.SoyAdi PersonelSoyadi,m.MusteriAdi,m.SirketAdi,s.SatisID,sum (sd.Miktar*sd.BirimFiyati*(1-sd.İndirim)) [Toplam Harcama] from Personeller p,Musteriler m,[Satis Detaylari] sd,Satislar s where p.PersonelID=s.PersonelID and s.SatisID=sd.SatisID and s.MusteriID=m.MusteriID group by p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,s.SatisID order by p.Adi,m.MusteriAdi
-/*Hangi personel hangi şirkete hangi ürünü kaçtane satmıştır.
+select MusteriAdi ,UrunAdi, sum(sd.Miktar) AlÄ±nanMiktar , sum(sd.BirimFiyati*Miktar*(1-sd.Ä°ndirim)) OdenenFiyat from Urunler u, Musteriler m, Satislar s ,[Satis Detaylari] sd where (u.UrunID=sd.UrunID) and (sd.SatisID=s.SatisID) and (s.MusteriID=m.MusteriID) group by u.UrunAdi,m.MusteriAdi
+--hangi personel hangi mÃ¼ÅŸteriye kaÃ§ tllik harcama yaptÄ±rmÄ±ÅŸ
+--Ã¶nemli
+select p.Adi PersonelAdi,p.SoyAdi PersonelSoyadi,m.MusteriAdi,m.SirketAdi,s.SatisID,sum (sd.Miktar*sd.BirimFiyati*(1-sd.Ä°ndirim)) [Toplam Harcama] from Personeller p,Musteriler m,[Satis Detaylari] sd,Satislar s where p.PersonelID=s.PersonelID and s.SatisID=sd.SatisID and s.MusteriID=m.MusteriID group by p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,s.SatisID order by p.Adi,m.MusteriAdi
+/*Hangi personel hangi ÅŸirkete hangi Ã¼rÃ¼nÃ¼ kaÃ§tane satmÄ±ÅŸtÄ±r.
 */
 select p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,u.UrunAdi,sum(sd.Miktar) SatilanUrunAdedi,count(sd.Miktar)YapilanSatisAdedi from Personeller p,Satislar s,Musteriler m,[Satis Detaylari] sd, Urunler u where p.PersonelID=s.PersonelID and s.MusteriID=m.MusteriID and s.SatisID=sd.SatisID and sd.UrunID=u.UrunID group by p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,u.UrunAdi order by p.Adi
 
---secili personelin secili müşteriye yaptığı satışlar
+--secili personelin secili mÃ¼ÅŸteriye yaptÄ±ÄŸÄ± satÄ±ÅŸlar
 select *from Satislar s where  s.MusteriID 
 in (select m.MusteriID from Musteriler m where m.MusteriAdi='Alejandra Camino')
 and s.PersonelID in (select p.PersonelID from Personeller p where p.Adi='Andrew')
 
  select count(*)from [Satis Detaylari]
 
- --join yapısı
-/*join:aralarında ilişki bulunan tabloların birbirleri ile bağlantısını kurarak
-tek sorguda tek tablo çıktısı vermeyi sağlayan yapıdır.
-3 e ayrılır
+ --join yapÄ±sÄ±
+/*join:aralarÄ±nda iliÅŸki bulunan tablolarÄ±n birbirleri ile baÄŸlantÄ±sÄ±nÄ± kurarak
+tek sorguda tek tablo Ã§Ä±ktÄ±sÄ± vermeyi saÄŸlayan yapÄ±dÄ±r.
+3 e ayrÄ±lÄ±r
 inner join,outer join,cross join*/
---inner join ilişkili tablolarda null olmayan kayıtları listeler
+--inner join iliÅŸkili tablolarda null olmayan kayÄ±tlarÄ± listeler
 select *from Urunler u inner join Kategoriler k on u.KategoriID=k.KategoriID
 select *from Urunler
 
 select *from Urunler u inner join Tedarikciler t
 on u.TedarikciID=t.TedarikciID
---join ve inner join aynıdır
---Urunler kategoriler ve tedarikçileri birleştirin
+--join ve inner join aynÄ±dÄ±r
+--Urunler kategoriler ve tedarikÃ§ileri birleÅŸtirin
 select *from Urunler u inner join Kategoriler k on u.KategoriID=k.KategoriID inner join Tedarikciler t on u.TedarikciID=t.TedarikciID
 
---personel satış ve müşterileri bağlama
+--personel satÄ±ÅŸ ve mÃ¼ÅŸterileri baÄŸlama
 select *from Personeller p inner join Satislar s on p.PersonelID=s.PersonelID inner join Musteriler m on s.MusteriID=m.MusteriID where p.Adi like 'robert'
---hangi personel hangi üründen toplam kaç dolarlık satış yaptığını ekrana
---yaz (personel urunler satis detayları)
-select p.Adi,u.UrunAdi,avg(sd.BirimFiyati) UrununBirimFiyati ,sum(sd.Miktar) UrunSatisAdedi,sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) ToplamYapilanSatis from Personeller p inner join Satislar s on p.PersonelID=s.PersonelID inner join [Satis Detaylari] sd on s.SatisID=sd.SatisID inner join Urunler u on sd.UrunID=u.UrunID group by p.Adi,u.UrunAdi order by p.Adi --order by 1
---avg yerine birim fiyatı group by kısmına yazılabilir
+--hangi personel hangi Ã¼rÃ¼nden toplam kaÃ§ dolarlÄ±k satÄ±ÅŸ yaptÄ±ÄŸÄ±nÄ± ekrana
+--yaz (personel urunler satis detaylarÄ±)
+select p.Adi,u.UrunAdi,avg(sd.BirimFiyati) UrununBirimFiyati ,sum(sd.Miktar) UrunSatisAdedi,sum(sd.BirimFiyati*sd.Miktar*(1-sd.Ä°ndirim)) ToplamYapilanSatis from Personeller p inner join Satislar s on p.PersonelID=s.PersonelID inner join [Satis Detaylari] sd on s.SatisID=sd.SatisID inner join Urunler u on sd.UrunID=u.UrunID group by p.Adi,u.UrunAdi order by p.Adi --order by 1
+--avg yerine birim fiyatÄ± group by kÄ±smÄ±na yazÄ±labilir
+/*
+outer join
+3 Ã§eÅŸit outer join vardÄ±r
+left outer join: ilk yazÄ±lan soldaki tablo dur. sol tablodaki tÃ¼m tablolar gelir 
+saÄŸ tabloda sol tarfla iliÅŸkili tÃ¼m tablolar gelir null olsa bile
+Right outer join:
+Full outer join
+*/
+--right join left join farkÄ±
+select *from Kategoriler k inner join Urunler u on k.KategoriID=u.KategoriID
+select *from Kategoriler k left join Urunler u on k.KategoriID=u.KategoriID
+select *from Urunler u right join Kategoriler k on u.KategoriID=k.KategoriID--Ã¼rÃ¼nÃ¼ olmayan kategorilerde gelir
+select *from Urunler u left join Kategoriler k on u.KategoriID=k.KategoriID--kategorisi olmayan Ã¼rÃ¼nlerde gelir
+select *from Kategoriler k right join Urunler u on k.KategoriID=u.KategoriID
+
+--right outer join: right tablo ilk yazÄ±lan tablodur saÄŸ tablodaki tÃ¼m kayÄ±tlar gelir 
+--null olsa bile sol tablodanb saÄŸ tablonun iliÅŸkili kayÄ±tlarÄ± getirilir
+--(saÄŸ tablo + sol un saÄŸla iliÅŸkili olan kÄ±smÄ±)
+--kategorileri olmayan Ã¼rÃ¼nler ile birlikte Ã¼rÃ¼nleri getiriniz
+select * from Urunler u left join Kategoriler k on u.KategoriID=k.KategoriID
+select * from Kategoriler k right join Urunler u on k.KategoriID=u.KategoriID
+--full outer join:
+--hem saÄŸdaki hem soldaki tablodan null kayÄ±tlar dahil tÃ¼m kayÄ±tlarÄ± getirir
+--right ve left joinin birleÅŸimi
+select * from Urunler u full join Kategoriler k on u.KategoriID=k.KategoriID order by u.UrunID
+
+select *from Kategoriler k left join Urunler u on k.KategoriID=u.KategoriID
+select *from Urunler u right join Kategoriler k on u.KategoriID=k.KategoriID--Ã¼rÃ¼nÃ¼ olmayan kategorilerde gelir
+
+--adÄ± nancy olan personelin yaptÄ±ÄŸÄ± satÄ±ÅŸlarÄ± listeleyin
+select *from Satislar s where s.PersonelID=(select p.PersonelID from Personeller p where p.Adi='nancy')
+
+--hiÃ§ satÄ±ÅŸ yapÄ±lmayan mÃ¼ÅŸterileri ekrana yazdÄ±rÄ±n //left join saÄŸdaki null olanlarÄ±da getirir
+select *from Musteriler m left join Satislar s on m.MusteriID=s.MusteriID
+where s.SatisID is null
+
+ select *from Musteriler m inner join Satislar s on m.MusteriID=s.MusteriID
+
+ insert into Nakliyeciler(SirketAdi) values('Aras Kargo')
+
+--hiÃ§ nakliye yapmayan nakliyecileri listele
+select *from Nakliyeciler n left join  Satislar s on n.NakliyeciID=s.ShipVia  
+where s.SatisID is null
+
+--inner join kullanarak personeller ile Ã¼rÃ¼nler table Ä±nÄ± birleÅŸtirin
+select *from Personeller p join Satislar s on p.PersonelID=s.PersonelID join [Satis Detaylari] sd on s.SatisID=sd.SatisID
+join Urunler u on sd.UrunID=u.UrunID
 
 
 
