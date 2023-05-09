@@ -318,6 +318,76 @@ where s.SatisID is null
 select *from Personeller p join Satislar s on p.PersonelID=s.PersonelID join [Satis Detaylari] sd on s.SatisID=sd.SatisID
 join Urunler u on sd.UrunID=u.UrunID
 
+--cross join yazılan tablolardaki tüm kayıtları  birbiriyle kartezyen çarparak
+--birbiriyle ilişkilendirir
+select *from Urunler,Kategoriler--1360
+select *from Urunler cross join Kategoriler--1360 --null değerlerde içersinde dahil
+select *from  Urunler cross join Personeller cross join Tedarikciler--22.185
+select *from Urunler,Personeller,Tedarikciler--22.185
+
+--kümeleme fonksiyonları
+--birleştirme(union) kesişim(intersect) ve fark(except) olmak üzere 3'e ayrılır
+--farklı iki sorgu üzerine kümeleme fonksiyonları uygulanırsa 
+-- **istenen verilerin kolon sayısı ve tipleri aynı olmak zorundadır
+--Union
+--Union ile müşteri ve tedarikçileri listeleyen sorgu
+select SirketAdi from Tedarikciler
+union
+select SirketAdi from Musteriler
+intersect
+select SirketAdi from Tedarikciler
+intersect
+select SirketAdi from Tedarikciler
+
+select SirketAdi from Musteriler
+except
+select SirketAdi from Tedarikciler
+
+select SirketAdi from Tedarikciler
+except
+select SirketAdi from Musteriler
+
+--Personellerin hiç satışını yapmadığı ürünleri listeleyiniz
+select p.Adi,u.UrunAdi from Urunler u cross join Personeller p
+except
+select p.Adi,u.UrunAdi from Personeller p left join Satislar s on p.PersonelID=s.PersonelID
+left join [Satis Detaylari] sd on s.SatisID=sd.SatisID
+left join Urunler u on sd.UrunID=u.UrunID
+
+--hangi tedarikçi hangi ürünü hiç tedarik etmemiştir
+
+select t.SirketAdi,u.UrunAdi from Tedarikciler t cross join Urunler u
+except
+select t.SirketAdi,u.UrunAdi from Tedarikciler t left join Urunler u
+on t.TedarikciID=u.UrunID
+
+--hangi ürün hangi müşteriye hiç satılmamıştır
+select m.MusteriAdi,m.SirketAdi,u.UrunAdi from Urunler u cross join Musteriler m
+except
+select m.MusteriAdi,m.SirketAdi,u.UrunAdi from Musteriler m 
+left join Satislar s on m.MusteriID=s.MusteriID
+left join [Satis Detaylari] sd on s.SatisID=sd.SatisID
+left join Urunler u on sd.UrunID=u.UrunID order by m.MusteriAdi 
+
+select * from  [Satis Detaylari] where UrunID=14
+
+--Having kullanımı
+--personellerin toplam satışı 5000 liranın üstünde olan ürünlerin listesini yapınız.
+select p.Adi,u.UrunAdi,sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) from Personeller p
+left join Satislar s on p.PersonelID=s.PersonelID
+left join [Satis Detaylari] sd on s.SatisID=sd.SatisID
+left join Urunler u on sd.UrunID=u.UrunID
+group by p.Adi,u.UrunAdi
+having sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim))>5000
+--kullanılır
+--select
+--Insert bir tabloya kayıt eklemeyi sağlayan komut
+--Yazımı: Insert [into] Tablo tabloAdi(kolon1,kolon2,kolon3)
+--values(deger,deger,deger)
+
+
+
+
 
 
 
