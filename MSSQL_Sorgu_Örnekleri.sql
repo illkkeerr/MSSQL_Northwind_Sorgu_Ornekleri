@@ -385,7 +385,25 @@ having sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim))>5000
 --Yazımı: Insert [into] Tablo tabloAdi(kolon1,kolon2,kolon3)
 --values(deger,deger,deger)
 
+--Urunler tablosuna elma ekleyin
+insert into Urunler (UrunAdi,BirimFiyati,HedefStokDuzeyi) values ('elma',2.30,5)
+select *from Urunler
+--Kategoriler tablosuna arabaları ekleyin
+insert into Kategoriler(KategoriAdi) values('arabalar')
+--arabalar kategorisine tanım ekleyin
+update Kategoriler set Tanimi='spor araba' where Kategoriler.KategoriAdi='arabalar'
+--personel tablosuna kendinizi ekleyin
+insert into Personeller(Adi,SoyAdi,Sehir,IseBaslamaTarihi) values('ilker','şenel','istanbul',2021-05-18)
 
+select *from Personeller p where p.Adi='ilker' 
+delete Personeller where Personeller.Adi='ilker'
+
+--Update komutu belli kayıtları güncellemeyi sağlayan komuttur
+--Yazımı update tabloadı set kolon=değer,kolon=değer,.. where
+begin tran--hatalı işlemler için geri dönüş alanı yaratır
+update Urunler set BirimFiyati=15
+rollback tran-- hatalı işlemlerden geri dönüş yapılmasını sağlar
+select *from Urunler
 
 
 
