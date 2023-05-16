@@ -404,11 +404,164 @@ begin tran--hatalı işlemler için geri dönüş alanı yaratır
 update Urunler set BirimFiyati=15
 rollback tran-- hatalı işlemlerden geri dönüş yapılmasını sağlar
 select *from Urunler
+go-- go satırları ayırmak için kullanılır
+--üstteki komutu alttaki komuttan ayırır
+--bütün ürünlerin adını turşu yapan sql kodu
+begin tran--geri alma
+update Urunler set UrunAdi='Turşu'
+--urun id si 70 olan ürünlerin fiyatini 5'e düşürme
+begin tran
+update Urunler set BirimFiyati=5 where Urunler.UrunID=70
+
+rollback tran
+select *from Urunler
+
+--kategorid 2 olan ürünlerin stoğunu beş attıran
+begin tran
+update Urunler set HedefStokDuzeyi+=5 where KategoriID=2
+rollback tran
+select *from Urunler
+--robert in müşteriye sattığı ürünlerin birim fiyatina ek yüzde beş indirim yap 
+begin tran
+update [Satis Detaylari] set  BirimFiyati*=0.95 where SatisID in
+(select s.SatisID from Satislar s  where PersonelID in
+(select p.PersonelID from Personeller p where p.Adi='Robert' ))
+rollback tran
+
+select p.PersonelID from Personeller p where p.Adi='Robert'
+
+(select s.SatisID from Satislar s  where PersonelID=
+(select p.PersonelID from Personeller p where p.Adi='Robert' ))
+
+--robert sorusu joinli çözüm
+begin tran
+--Adı robert olan personelin müşteriye yaptığı satışlara %5 indirim 
+update [Satis Detaylari] set BirimFiyati=BirimFiyati*0.95 where SatisID in
+(select sd.SatisID from [Satis Detaylari] sd join Satislar s on sd.SatisID=s.SatisID
+join Personeller p on s.PersonelID =p.PersonelID
+where p.Adi='Robert')
+rollback tran
+
+select * from [Satis Detaylari] sd join Satislar s on sd.SatisID=s.SatisID
+join Personeller p on s.PersonelID =p.PersonelID
+where p.Adi='Robert'
+
+--hangi personel hangi müşteriye hangi ürünleri satmış
+select p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,u.UrunAdi,u.BirimFiyati from Personeller p 
+left join Satislar s on p.PersonelID=s.PersonelID
+left join Musteriler m on s.MusteriID=m.MusteriID
+left join [Satis Detaylari] sd on s.SatisID=sd.SatisID
+left join Urunler u on sd.UrunID=u.UrunID group by p.Adi,p.SoyAdi,m.MusteriAdi,m.SirketAdi,u.UrunAdi,u.BirimFiyati order by p.Adi
+
+--Delete komutu belirli kayıtlları tablodan silme işlemini sağlayan komuttur
+--Yazımı :delete [from] tablo adı 
+begin tran
+delete from Urunler--bu komutun düzgün çalışabilmesi için
+--fk no action dan set null veya set default seçeneği verilmesi gerekir
+delete from Urunler where KategoriID=8
+rollback tran
+--ifli komutlar
+if exists (select * from Urunler where UrunAdi='incir')
+		begin
+		select * from Urunler
+		end
+		else 
+		begin 
+		Insert into Urunler(UrunAdi,BirimFiyati,HedefStokDuzeyi) values('incir',2,30)
+		end
+--Delete belirli kayıt(ları) tablodan silme işlemini sağlayan komuttur.
+--Yazımı :delete [from] TabloAdi varsa where
+begin tran
+delete Urunler where KategoriID=null
+select * from Urunler
+rollback tran
+
+select * from [Satis Detaylari] where SatisID=10248
+
+select * from Satislar
+
+begin tran
+delete Satislar where SatisID=10248
+
+--ürünler tablosuna yeni bir ürün ekleyip o ürünün fiyatını stoğunu güncelleyip
+--sonra ürünü silen sorguları yazınız
+insert into Urunler(UrunAdi) values('çilek')
+update Urunler set Urunler.HedefStokDuzeyi=100 where Urunler.UrunID in
+(select top 1 UrunID from Urunler order by UrunID desc) 
+delete from Urunler where UrunID=(select top 1 UrunID from Urunler order by UrunID desc) 
+
+select*from Urunler
 
 
+declare @temp int--değişken adı temp
+set @temp=6
 
+--scope_identity()--enson girilen değerin identity sini verir
 
+insert into urunler(UrunAdi) values('muz')
+declare @id int =scope_identity()--en son eklenen değerin idsini alır
+update Urunler set BirimFiyati=5,HedefStokDuzeyi=999
+where UrunId=@id
+select *from Urunler
+delete Urunler where UrunID=@id
+select *from Urunler
 
+--DDL (Data Definition) komutları
+--create alter drop ..... komutları bulunur
+--create:Yeni bir veritabanı -view -procedure trigger functions oluşturmak için
+--kullanılır
+--Alter:Veritabanı view procedure trigger functions tekrar düzenlemek için kullanılır.
+--Drop:Veritabanı view procedure trigger functions kaldırmak için kullanılır.
+create table Kisiler(
+KisiId int primary key identity(1,1),
+Adi nvarchar(50) not null,
+Soyadi nvarchar(50) not null,
+Sehir nvarchar(50) not null
+)
 
+drop table Kisiler--Kisiler table tablosunu siler
 
+alter table Kisiler --düzenleme yapmak için alter kullanılır
+drop column Soyadi--Soyadı sütununu kaldırır
 
+insert into Kisiler(Adi,Soyadi,Sehir) values ('mehmet','sultan','İstanbul')
+select *from Kisiler
+
+--View
+--Sanal Tablo oluşturma metot mantığı 
+--her çağrıldığında sorgu çalışır ama oluşturulurken birkez
+--derlenir
+go
+create view UrunListesi
+as
+select *from Urunler
+go
+
+alter view UrunListesi
+as
+select u.*,k.KategoriAdi,k.Tanimi from Urunler u left join Kategoriler k on
+u.KategoriID=k.KategoriID
+go
+
+select*from UrunListesi
+go
+
+--hangi personel ne kadar satış yapmış
+create view PersonelSatis
+as
+select p.Adi,p.SoyAdi,sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) ToplamSatis from Personeller p
+left join Satislar s on p.PersonelID=s.PersonelID
+left join [Satis Detaylari] sd on s.SatisID=sd.SatisID group by p.Adi,p.SoyAdi 
+
+order by p.Adi--order by view içinde olmaz
+go
+--Personeller hangi üründen kaç tl lik satış yapmış
+create view PersonelSatisRaporu
+as
+select p.Adi,u.UrunAdi,sum(sd.BirimFiyati*sd.Miktar*(1-sd.İndirim)) toplam from Satislar s
+left join Personeller p on p.PersonelID=s.PersonelID
+left join [Satis Detaylari] sd on sd.SatisID=s.SatisID
+left join Urunler u on u.UrunID=sd.UrunID group by p.Adi,u.UrunAdi
+go
+
+select * from PersonelSatisRaporu
